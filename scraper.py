@@ -16,6 +16,6 @@ def scrape():
             subtitle = subsection.find('h3').string
             items = subsection.findAll('button', {'class': 'h4 site-panel__daypart-item-title'})
             itemlist = [i.contents[0].strip() for i in items]
-            content.append([subtitle, itemlist])
-        output.append([title, content])
+            content.append( (subtitle, itemlist) )
+        output.append( (title, content) )
     return output
