@@ -7,16 +7,15 @@ def gen_html(database, menu, user):
         <input type="submit" value="Enter">
         </form>
         ''')
-    for l1 in menu:
-        output.append(f'<h1>{l1[0]}</h1>')
-        for l2 in l1[1]:
-            output.append(f'<h2>{l2[0]}</h2>')
-            for l3 in l2[1]:
+    for category, subcategories in menu:
+        output.append(f'<h1>{category}</h1>')
+        for subcategory, items in subcategories:
+            output.append(f'<h2>{subcategory}</h2>')
+            for item in items:
                 output.append(f'''
-                    {database.get_item(l3[0])} {l3[0]} {' '.join(l3[1])}
+                    {database.get_item(item[0])} {item[0]} {' '.join(item[1])}
                     <button>up</button>
                     <button>down</button>
-                    {l3[0]}{l3[1]}
                     </br>
                     ''')
     return '\n'.join(output)
