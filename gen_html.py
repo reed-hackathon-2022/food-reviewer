@@ -1,6 +1,6 @@
 from vote_database import VoteDatabase
 
-def site_get(database, menu, userID):
+def gen_html(database, menu, user):
     output = []
     output.append(f'''
         <form method="POST">
@@ -13,7 +13,7 @@ def site_get(database, menu, userID):
             output.append(f'<h2>{l2[0]}</h2>')
             for l3 in l2[1]:
                 output.append(f'''
-                    {database.get_item(l3[0])} {l3[0]} {l3[1]}
+                    {database.get_item(l3[0])} {l3[0]} {' '.join(l3[1])}
                     <button>up</button>
                     <button>down</button>
                     {l3[0]}{l3[1]}

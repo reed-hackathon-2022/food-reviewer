@@ -30,9 +30,10 @@ def scrape():
             items = subsection.findAll('button', {'class': 'h4 site-panel__daypart-item-title'})
             itemlist = []
             for i in items:
-                item = [i.contents[0].strip(), None]
+                item = (i.contents[0].strip(), [])
                 if len(i.contents) > 1:
-                    item[1] = i.contents[1]
+                    for image in i.contents[1].contents:
+                        item[1].append(str(image))
                 itemlist.append(item)
             content.append( (subtitle, itemlist) )
         output.append( (title, content) )
