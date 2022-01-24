@@ -1,10 +1,12 @@
 from collections import defaultdict
 
 class VoteDatabase():
+    def inner_constructor(): #need to do this or pickle won't work
+        return defaultdict(int)
     
     def __init__(self):
         self.totals = defaultdict(int)
-        self.votelogs = defaultdict(lambda: defaultdict(int))
+        self.votelogs = defaultdict(self.inner_constructor)
         
     def set(self, user, item, value):
         oldvalue = self.votelogs[user][item]
