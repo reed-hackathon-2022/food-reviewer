@@ -1,5 +1,5 @@
 from vote_database import VoteDatabase
-from gen_item import gen_item
+from gen_item import gen_item, script
 from datetime import date
 
 def gen_html(database, menu, user):
@@ -35,7 +35,7 @@ def gen_html(database, menu, user):
             margin: 0.5em 0 0.25em;
         }}
         h3 {{
-            font-family: "calluna", "Times New Roman", Times, serif;
+            font-family: verdana;
             font-size: 26px;
             font-weight: normal;
             line-height: normal;
@@ -46,6 +46,7 @@ def gen_html(database, menu, user):
             margin-left: 150px;
         }}
         </style>
+        {script}
         </head>
         ''')
     output.append('''<body style="background-color:#fffadb;margin:0px;">
@@ -63,7 +64,7 @@ def gen_html(database, menu, user):
             output.append(f'<h2>{subcategory}</h2>')
             for item in items:
                 output.append('<h3>')
-                output.append(gen_item(item[0], item[1], database.get_item(item[0])))
+                output.append(gen_item(item[0], item[1], database.get_item(item[0]), database.get_single_vote(user, item[0])))
                 output.append('</h3>')
     output.append('</div> </body>')
     return '\n'.join(output)

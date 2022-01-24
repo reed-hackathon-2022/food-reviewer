@@ -11,6 +11,7 @@ def timely_scrape():
     if time.time() - LAST_RUN > 600:
         LAST_RUN = time.time()
         LAST_RETURN = scrape()
+        print(LAST_RETURN) #for debug purposes
         return LAST_RETURN
     return LAST_RETURN
 
