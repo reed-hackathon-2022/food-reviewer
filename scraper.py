@@ -6,6 +6,8 @@ LAST_RUN = 0
 LAST_RETURN = None
 
 def timely_scrape():
+    global LAST_RUN
+    global LAST_RETURN
     if time.time() - LAST_RUN > 600:
         LAST_RUN = time.time()
         LAST_RETURN = scrape()
@@ -26,7 +28,12 @@ def scrape():
         for subsection in subsections:
             subtitle = subsection.find('h3').string
             items = subsection.findAll('button', {'class': 'h4 site-panel__daypart-item-title'})
-            itemlist = [i.contents[0].strip() for i in items]
+            itemlist = []
+            for i in items:
+                item = [i.contents[0].strip(), None]
+                if len(i.contents) > 1:
+                    item[1] = i.contents[1]
+                itemlist.append(item)
             content.append( (subtitle, itemlist) )
         output.append( (title, content) )
     return output

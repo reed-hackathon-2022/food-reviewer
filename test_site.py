@@ -1,5 +1,5 @@
 from flask import Flask, request
-from scraper import scrape
+from scraper import timely_scrape
 import pickle
 
 app = Flask(__name__)
@@ -23,7 +23,7 @@ def test_site_post(request):
     n += 1
 
 def test_site_get(request):
-    results = scrape()
+    results = timely_scrape()
     output = []
     output.append(f'''
         <form method="POST">
@@ -37,10 +37,10 @@ def test_site_get(request):
             output.append(f'<h2>{l2[0]}</h2>')
             for l3 in l2[1]:
                 output.append(f'''
-                    {l3}
+                    {l3[0]}{l3[1]}
                     <button>up</button>
                     <button>down</button>
                     </br>
                     ''')
-                              
+
     return '\n'.join(output)
