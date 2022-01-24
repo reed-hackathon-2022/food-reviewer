@@ -1,4 +1,5 @@
 from vote_database import VoteDatabase
+from gen_item import gen_item
 from datetime import date
 
 def gen_html(database, menu, user):
@@ -32,11 +33,6 @@ def gen_html(database, menu, user):
         for subcategory, items in subcategories:
             output.append(f'<h2>{subcategory}</h2>')
             for item in items:
-                output.append(f'''
-                    {database.get_item(item[0])} {item[0]} {' '.join(item[1])}
-                    <button>up</button>
-                    <button>down</button>
-                    </br>
-                    ''')
+                output.append(gen_item(item[0], item[1], database.get_item(item[0]))
     output.append('</body>')
     return '\n'.join(output)
