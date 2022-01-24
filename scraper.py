@@ -33,6 +33,8 @@ def scrape():
                 item = (i.contents[0].strip(), [])
                 if len(i.contents) > 1:
                     for image in i.contents[1].contents:
+                        image['width'] = 24
+                        image['height'] = 24
                         item[1].append(str(image))
                 itemlist.append(item)
             content.append( (subtitle, itemlist) )
