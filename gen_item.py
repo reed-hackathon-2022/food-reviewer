@@ -1,7 +1,7 @@
 def gen_item(name, diets, votes):
+    up = '▲'
+    down = '▼'
     return f'''
-        {votes} {name} {' '.join(diets)}
-        <button>up</button>
-        <button>down</button>
+        {down} {votes} {up} {name} {' '.join(diets)}
         </br>
         '''
