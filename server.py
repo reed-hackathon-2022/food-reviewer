@@ -29,3 +29,6 @@ def handle_request():
         database.set(user, item, value)
         tasks.append(asyncio.create_task(save()))
         return ""
+
+if __name__ = '__main__':
+    app.run()
