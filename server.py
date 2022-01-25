@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 
-database = VoteDatabase('votes.db')
+database = VoteDatabase('votes')
 
         
 tasks = []

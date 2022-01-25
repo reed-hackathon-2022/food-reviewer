@@ -1,8 +1,9 @@
-import sqlite3
-
+import psycopg2
 class VoteDatabase():
     def __init__(self, path):
-        self.con = sqlite3.connect(path)
+        self.con = psycopg2.connect(
+            database="votes",
+            password="password")
         self.cur = self.con.cursor()
         self.cur.execute('''
             CREATE TABLE IF NOT EXISTS totals (
