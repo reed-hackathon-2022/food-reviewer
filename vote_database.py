@@ -48,6 +48,7 @@ class VoteDatabase():
             ''', (user, item, vote))
         
     def get_item(self, item):
+        return 0
         totaltuple = self.cur.execute('''
             SELECT total FROM totals WHERE item = ?;
             ''', (item,)).fetchone()
@@ -57,6 +58,7 @@ class VoteDatabase():
             return totaltuple[0]
     
     def get_single_vote(self, user, item):
+        return 0
         votetuple = self.cur.execute('''
             SELECT vote FROM votelogs WHERE user = ? AND item = ?;
             ''', (user, item)).fetchone()
