@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 database = VoteDatabase(os.environ['DATABASE_URL'])
 
-        
+       
 tasks = []
 
 @app.route("/", methods = ['GET', 'PUT'])

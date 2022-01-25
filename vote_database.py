@@ -11,57 +11,59 @@ class VoteDatabase():
             ''')
         self.cur.execute('''
             CREATE TABLE IF NOT EXISTS votelogs (
-                user TEXT,
+                userid TEXT,
                 item TEXT,
                 vote INTEGER NOT NULL DEFAULT 0,
-                PRIMARY KEY (user, item)
+                PRIMARY KEY (userid, item)
             );
             ''')
         
     def set(self, user, item, vote):
-        oldtotaltuple = self.cur.execute('''
-            SELECT total FROM totals WHERE item = ?;
-            ''', (item,)).fetchone()
+        self.cur.execute('''
+            SELECT total FROM totals WHERE item = %s;
+            ''', (item,))
+        oldtotaltuple = self.cur.fetchone()
         if oldtotaltuple == None:
             self.cur.execute('''
-            INSERT INTO totals (item) VALUES (?);
+            INSERT INTO totals (item) VALUES (%s);
             ''', (item,))
             oldtotal = 0
         else:
             oldtotal = oldtotaltuple[0]
             
-        oldvotetuple = self.cur.execute('''
-            SELECT vote FROM votelogs WHERE user = ? AND item = ?;
-            ''', (user, item)).fetchone() 
+        self.cur.execute('''
+            SELECT vote FROM votelogs WHERE userid = %s AND item = %s;
+            ''', (user, item))
+        oldvotetuple = self.cur.fetchone() 
         if oldvotetuple == None:
             self.cur.execute('''
-            INSERT INTO votelogs (user, item) VALUES (?, ?);
+            INSERT INTO votelogs (userid, item) VALUES (%s, %s);
             ''', (user, item))
             oldvote = 0
         else:
             oldvote = oldvotetuple[0]
         self.cur.execute('''
-            REPLACE INTO totals (item, total) VALUES (?, ?);
-            ''', (item, oldtotal + vote - oldvote))
+            UPDATE totals SET total = %s WHERE item = %s;
+            ''', (oldtotal + vote - oldvote, item))
         self.cur.execute('''
-            REPLACE INTO votelogs (user, item, vote) VALUES (?, ?, ?);
-            ''', (user, item, vote))
+            UPDATE votelogs SET vote = %s WHERE userid = %s AND item = %s;
+            ''', (vote, user, item))
         
     def get_item(self, item):
-        return 0
-        totaltuple = self.cur.execute('''
-            SELECT total FROM totals WHERE item = ?;
-            ''', (item,)).fetchone()
+        self.cur.execute('''
+            SELECT total FROM totals WHERE item = %s;
+            ''', (item,))
+        totaltuple = self.cur.fetchone()
         if totaltuple == None:
             return 0
         else:
             return totaltuple[0]
     
     def get_single_vote(self, user, item):
-        return 0
-        votetuple = self.cur.execute('''
-            SELECT vote FROM votelogs WHERE user = ? AND item = ?;
-            ''', (user, item)).fetchone()
+        self.cur.execute('''
+            SELECT vote FROM votelogs WHERE userid = %s AND item = %s;
+            ''', (user, item))
+        votetuple = self.cur.fetchone()
         if votetuple == None:
             return 0
         else:
