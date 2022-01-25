@@ -1,9 +1,7 @@
 import psycopg2
 class VoteDatabase():
-    def __init__(self, path):
-        self.con = psycopg2.connect(
-            database="votes",
-            password="password")
+    def __init__(self, database):
+        self.con = psycopg2.connect(database)
         self.cur = self.con.cursor()
         self.cur.execute('''
             CREATE TABLE IF NOT EXISTS totals (

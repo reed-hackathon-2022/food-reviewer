@@ -2,12 +2,13 @@ from flask import Flask, request
 from scraper import timely_scrape
 from vote_database import VoteDatabase
 from gen_html import gen_html
+import os
 
 app = Flask(__name__)
 
 
 
-database = VoteDatabase('votes')
+database = VoteDatabase(os.environ['DATABASE_URL'])
 
         
 tasks = []
