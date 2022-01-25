@@ -2,22 +2,15 @@ from flask import Flask, request
 from scraper import timely_scrape
 from vote_database import VoteDatabase
 from gen_html import gen_html
-import pickle, asyncio, os
 
 app = Flask(__name__)
 
-if os.path.exists('database'):
-    with open('database', 'rb') as f:
-        database = pickle.load(f)
-else:
-    database = VoteDatabase()
+
+
+database = VoteDatabase('votes.db')
 
         
 tasks = []
-
-async def save():
-    with open('database', 'wb') as f:
-        pickle.dump(database, f)
 
 @app.route("/", methods = ['GET', 'PUT'])
 def handle_request():
@@ -32,8 +25,7 @@ def handle_request():
         if value not in [-1, 0, 1]:
             return ""   
         database.set(user, item, value)
-        tasks.append(asyncio.create_task(save()))
         return ""
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     app.run()
