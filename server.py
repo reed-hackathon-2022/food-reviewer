@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 
 
-database = VoteDatabase(os.environ['DATABASE_URL'])
+database = SQLiteVoteDatabase('votes.db')
 
        
 tasks = []
