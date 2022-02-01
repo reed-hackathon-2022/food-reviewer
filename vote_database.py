@@ -88,6 +88,7 @@ class SQLiteVoteDatabase():
                 PRIMARY KEY (user, item)
             );
             ''')
+        self.con.commit()
         
     def set(self, user, item, vote):
         oldtotaltuple = self.cur.execute('''
@@ -117,6 +118,7 @@ class SQLiteVoteDatabase():
         self.cur.execute('''
             REPLACE INTO votelogs (user, item, vote) VALUES (?, ?, ?);
             ''', (user, item, vote))
+        self.con.commit()
         
     def get_item(self, item):
         totaltuple = self.cur.execute('''

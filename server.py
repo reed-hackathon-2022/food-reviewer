@@ -1,6 +1,6 @@
 from flask import Flask, request
 from scraper import timely_scrape
-from vote_database import VoteDatabase
+from vote_database import SQLiteVoteDatabase
 from gen_html import gen_html
 import os
 
@@ -15,7 +15,7 @@ tasks = []
 
 @app.route("/", methods = ['GET', 'PUT'])
 def handle_request():
-    user = request.remote_addr
+    user = request.headers.get('X-Forwarded-For') #pythonanywhere specific
     if request.method == 'GET':
         menu = timely_scrape()
         return gen_html(database, menu, user)

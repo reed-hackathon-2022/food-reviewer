@@ -1,4 +1,4 @@
-from vote_database import VoteDatabase
+from vote_database import SQLiteVoteDatabase
 from gen_item import gen_item, script
 from datetime import date
 
