@@ -92,7 +92,7 @@ class SQLiteVoteDatabase():
         
     def set(self, user, item, vote):
         cur = self.con.cursor()
-        oldtotaltuple = ur.execute('''
+        oldtotaltuple = cur.execute('''
             SELECT total FROM totals WHERE item = ?;
             ''', (item,)).fetchone()
         if oldtotaltuple == None:
