@@ -3,14 +3,14 @@ import psycopg2, sqlite3
 class PostgreSQLVoteDatabase():
     def __init__(self, database):
         self.con = psycopg2.connect(database)
-        self.cur = self.con.cursor()
-        self.cur.execute('''
+        cur = self.con.cursor()
+        cur.execute('''
             CREATE TABLE IF NOT EXISTS totals (
                 item TEXT PRIMARY KEY,
                 total INTEGER NOT NULL DEFAULT 0
             );
             ''')
-        self.cur.execute('''
+        cur.execute('''
             CREATE TABLE IF NOT EXISTS votelogs (
                 userid TEXT,
                 item TEXT,
@@ -20,51 +20,51 @@ class PostgreSQLVoteDatabase():
             ''')
         
     def set(self, user, item, vote):
-        self.cur.execute('''
+        cur.execute('''
             SELECT total FROM totals WHERE item = %s;
             ''', (item,))
-        oldtotaltuple = self.cur.fetchone()
+        oldtotaltuple = cur.fetchone()
         if oldtotaltuple == None:
-            self.cur.execute('''
+            cur.execute('''
             INSERT INTO totals (item) VALUES (%s);
             ''', (item,))
             oldtotal = 0
         else:
             oldtotal = oldtotaltuple[0]
             
-        self.cur.execute('''
+        cur.execute('''
             SELECT vote FROM votelogs WHERE userid = %s AND item = %s;
             ''', (user, item))
-        oldvotetuple = self.cur.fetchone() 
+        oldvotetuple = cur.fetchone() 
         if oldvotetuple == None:
-            self.cur.execute('''
+            cur.execute('''
             INSERT INTO votelogs (userid, item) VALUES (%s, %s);
             ''', (user, item))
             oldvote = 0
         else:
             oldvote = oldvotetuple[0]
-        self.cur.execute('''
+        cur.execute('''
             UPDATE totals SET total = %s WHERE item = %s;
             ''', (oldtotal + vote - oldvote, item))
-        self.cur.execute('''
+        cur.execute('''
             UPDATE votelogs SET vote = %s WHERE userid = %s AND item = %s;
             ''', (vote, user, item))
         
     def get_item(self, item):
-        self.cur.execute('''
+        cur.execute('''
             SELECT total FROM totals WHERE item = %s;
             ''', (item,))
-        totaltuple = self.cur.fetchone()
+        totaltuple = cur.fetchone()
         if totaltuple == None:
             return 0
         else:
             return totaltuple[0]
     
     def get_single_vote(self, user, item):
-        self.cur.execute('''
+        cur.execute('''
             SELECT vote FROM votelogs WHERE userid = %s AND item = %s;
             ''', (user, item))
-        votetuple = self.cur.fetchone()
+        votetuple = cur.fetchone()
         if votetuple == None:
             return 0
         else:
@@ -72,15 +72,15 @@ class PostgreSQLVoteDatabase():
         
 class SQLiteVoteDatabase():
     def __init__(self, path):
-        self.con = sqlite3.connect(path)
-        self.cur = self.con.cursor()
-        self.cur.execute('''
+        self.con = sqlite3.connect(path, check_same_thread=False)
+        cur = self.con.cursor()
+        cur.execute('''
             CREATE TABLE IF NOT EXISTS totals (
                 item TEXT PRIMARY KEY,
                 total INTEGER NOT NULL DEFAULT 0
             );
             ''')
-        self.cur.execute('''
+        cur.execute('''
             CREATE TABLE IF NOT EXISTS votelogs (
                 user TEXT,
                 item TEXT,
@@ -91,37 +91,39 @@ class SQLiteVoteDatabase():
         self.con.commit()
         
     def set(self, user, item, vote):
-        oldtotaltuple = self.cur.execute('''
+        cur = self.con.cursor()
+        oldtotaltuple = ur.execute('''
             SELECT total FROM totals WHERE item = ?;
             ''', (item,)).fetchone()
         if oldtotaltuple == None:
-            self.cur.execute('''
+            cur.execute('''
             INSERT INTO totals (item) VALUES (?);
             ''', (item,))
             oldtotal = 0
         else:
             oldtotal = oldtotaltuple[0]
             
-        oldvotetuple = self.cur.execute('''
+        oldvotetuple = cur.execute('''
             SELECT vote FROM votelogs WHERE user = ? AND item = ?;
             ''', (user, item)).fetchone() 
         if oldvotetuple == None:
-            self.cur.execute('''
+            cur.execute('''
             INSERT INTO votelogs (user, item) VALUES (?, ?);
             ''', (user, item))
             oldvote = 0
         else:
             oldvote = oldvotetuple[0]
-        self.cur.execute('''
+        cur.execute('''
             REPLACE INTO totals (item, total) VALUES (?, ?);
             ''', (item, oldtotal + vote - oldvote))
-        self.cur.execute('''
+        cur.execute('''
             REPLACE INTO votelogs (user, item, vote) VALUES (?, ?, ?);
             ''', (user, item, vote))
         self.con.commit()
         
     def get_item(self, item):
-        totaltuple = self.cur.execute('''
+        cur = self.con.cursor()
+        totaltuple = cur.execute('''
             SELECT total FROM totals WHERE item = ?;
             ''', (item,)).fetchone()
         if totaltuple == None:
@@ -130,7 +132,8 @@ class SQLiteVoteDatabase():
             return totaltuple[0]
     
     def get_single_vote(self, user, item):
-        votetuple = self.cur.execute('''
+        cur = self.con.cursor()
+        votetuple = cur.execute('''
             SELECT vote FROM votelogs WHERE user = ? AND item = ?;
             ''', (user, item)).fetchone()
         if votetuple == None:

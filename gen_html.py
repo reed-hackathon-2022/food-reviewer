@@ -32,18 +32,18 @@ def gen_html(database, menu, user):
             font-size: 36px;
             font-weight: normal;
             line-height: normal;
-            margin: 0.5em 0 0.25em;
+            margin: 0.5em 25px 0.25em;
         }}
         h3 {{
             font-family: verdana;
             font-size: 26px;
             font-weight: normal;
             line-height: normal;
-            margin: 0.5em 0 0.5em;
+            margin: 0.5em 50px 0.5em;
 
         }}
         #center_body {{
-            margin-left: 150px;
+            margin-left: 75px;
         }}
         </style>
         {script}

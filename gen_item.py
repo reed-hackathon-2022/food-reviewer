@@ -65,6 +65,6 @@ def gen_item(name, diets, votes, currentvote):
         <span style="{'color:red' if currentvote == -1 else 'color:black'}" data-item="{html.escape(name)}" data-value="-1" data-active="{1 if currentvote == -1 else 0}" onClick="buttonClick(this)">▼</span>
         '''
     return f'''
-        {down} {score} {up} {name} {' '.join(diets)}
+        {down} {score} {up} &nbsp; {name} {' '.join(diets)}
         </br>
         '''
