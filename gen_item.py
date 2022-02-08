@@ -1,5 +1,6 @@
 import html
 
+# interactive button script to be appended to gen_html's output
 script = '''
     <script>
         function buttonClick(button) {
@@ -54,6 +55,7 @@ script = '''
     </script>
     '''
 
+# generate an individual item
 def gen_item(name, diets, votes, currentvote): 
     up = f'''
         <span style="{'color:green' if currentvote == 1 else 'color:black'};cursor:pointer;" data-item="{html.escape(name)}" data-value="1" data-active="{1 if currentvote == 1 else 0}" onClick="buttonClick(this)">▲</span>
