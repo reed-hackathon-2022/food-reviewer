@@ -4,21 +4,21 @@ from vote_database import SQLiteVoteDatabase
 from gen_html import gen_html
 import os
 
+# create Flask app
 app = Flask(__name__)
 
-
-
+# intialize database
 database = SQLiteVoteDatabase('votes.db')
 
-       
-tasks = []
-
+# route GET and PUT to handle_request()
 @app.route("/", methods = ['GET', 'PUT'])
 def handle_request():
-    user = request.headers.get('X-Forwarded-For') #pythonanywhere specific
+    user = request.headers.get('X-Forwarded-For') # pythonanywhere specific
+    # on GET populate the web page
     if request.method == 'GET':
         menu = timely_scrape()
         return gen_html(database, menu, user)
+    # on PUT update database
     if request.method == 'PUT':
         json = request.get_json()
         item = json['item']
@@ -28,5 +28,6 @@ def handle_request():
         database.set(user, item, value)
         return ""
 
+# start test mode server
 if __name__ == '__main__':
     app.run()
