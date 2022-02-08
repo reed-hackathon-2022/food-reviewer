@@ -1,6 +1,8 @@
 import psycopg2, sqlite3
 
+# SQL database class
 class PostgreSQLVoteDatabase():
+    # intitialize database
     def __init__(self, database):
         self.con = psycopg2.connect(database)
         cur = self.con.cursor()
@@ -19,6 +21,7 @@ class PostgreSQLVoteDatabase():
             );
             ''')
         
+    # set a single data value
     def set(self, user, item, vote):
         cur.execute('''
             SELECT total FROM totals WHERE item = %s;
@@ -50,6 +53,7 @@ class PostgreSQLVoteDatabase():
             UPDATE votelogs SET vote = %s WHERE userid = %s AND item = %s;
             ''', (vote, user, item))
         
+    # get a single item object
     def get_item(self, item):
         cur.execute('''
             SELECT total FROM totals WHERE item = %s;
@@ -60,6 +64,7 @@ class PostgreSQLVoteDatabase():
         else:
             return totaltuple[0]
     
+    # get a single user's vote
     def get_single_vote(self, user, item):
         cur.execute('''
             SELECT vote FROM votelogs WHERE userid = %s AND item = %s;
@@ -69,7 +74,8 @@ class PostgreSQLVoteDatabase():
             return 0
         else:
             return votetuple[0]
-        
+
+# addition SQL database
 class SQLiteVoteDatabase():
     def __init__(self, path):
         self.con = sqlite3.connect(path, check_same_thread=False)
@@ -89,7 +95,8 @@ class SQLiteVoteDatabase():
             );
             ''')
         self.con.commit()
-        
+    
+    # sets a user's vote
     def set(self, user, item, vote):
         cur = self.con.cursor()
         oldtotaltuple = cur.execute('''
@@ -121,6 +128,7 @@ class SQLiteVoteDatabase():
             ''', (user, item, vote))
         self.con.commit()
         
+    # gets an item
     def get_item(self, item):
         cur = self.con.cursor()
         totaltuple = cur.execute('''
@@ -131,6 +139,7 @@ class SQLiteVoteDatabase():
         else:
             return totaltuple[0]
     
+    # gets a user's vote
     def get_single_vote(self, user, item):
         cur = self.con.cursor()
         votetuple = cur.execute('''
