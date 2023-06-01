@@ -16,7 +16,11 @@ def timely_scrape():
     return LAST_RETURN
 
 def scrape():
-    with urllib.request.urlopen('https://reed.cafebonappetit.com/') as response:
+    req = urllib.request.Request(
+        'https://reed.cafebonappetit.com/',
+        headers={'User-Agent': 'Mozilla/5.0'}
+    )
+    with urllib.request.urlopen(req) as response:
         html = response.read()
     soup = BeautifulSoup(html, 'html.parser')
     sections = soup.findAll('section', {'data-type': 'daypart'})
