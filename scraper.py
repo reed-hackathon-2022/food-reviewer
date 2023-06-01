@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup
 LAST_RUN = 0
 LAST_RETURN = None
 
+# function that meters scraping based on the most recent run of scrape()
+# by only allowing the scraper to run every 10 minutes.
 def timely_scrape():
     global LAST_RUN
     global LAST_RETURN
@@ -15,6 +17,7 @@ def timely_scrape():
         return LAST_RETURN
     return LAST_RETURN
 
+# scraper for Bon Appetit's menu on their web site
 def scrape():
     req = urllib.request.Request(
         'https://reed.cafebonappetit.com/',

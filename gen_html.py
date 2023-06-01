@@ -2,6 +2,7 @@ from vote_database import SQLiteVoteDatabase
 from gen_item import gen_item, script
 from datetime import date
 
+# add HTML string with front end specifications to the output
 def gen_html(database, menu, user):
     output = []
     output.append(f'''
@@ -49,6 +50,7 @@ def gen_html(database, menu, user):
         {script}
         </head>
         ''')
+    # Add the header
     output.append('''<body style="background-color:#fffadb;margin:0px;">
         <div id="headerContainer">
         <header aria-label="Reed header" id="header">
@@ -57,7 +59,7 @@ def gen_html(database, menu, user):
         </div>
         <div id="center_body">
     ''')
-
+    # populate the menu
     for category, subcategories in menu:
         output.append(f'<h1>{category}</h1>')
         for subcategory, items in subcategories:
