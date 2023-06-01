@@ -1,6 +1,6 @@
 # Reed College Food Reviewer
 
-This repository provides a webservice that allows Reed College and public users to review the daily food options provided by the Bon Appétit Management Company at Reed Commons. The service relies on a scraper of Bon Appétit's website to populate a list of daily food items and allows users to vote up or down each item once.  The website is not currently hosted anywhere.
+This repository provides a webservice that allows Reed College and public users to review the daily food options provided by the Bon Appétit Management Company at Reed Commons. The service relies on a scraper of Bon Appétit's website to populate a list of daily food items and allows users to vote up or down each item once.  The website is currently hosted at http://py.zacharybarbanell.com/.
 
 ### server.py
 
